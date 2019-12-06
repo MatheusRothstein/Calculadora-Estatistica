@@ -1,4 +1,6 @@
 from random import randint
+from math import sqrt
+import statistics
 
 
 class CalculadoraEstatistica:
@@ -16,16 +18,51 @@ class CalculadoraEstatistica:
     def calculaMediana(self):
         numeros_ordenados = sorted(self.listaValores)
         if self.is_impar(len(numeros_ordenados)):
-            meio = len(numeros_ordenados) / 2
+            meio = int(len(numeros_ordenados) / 2)
             return numeros_ordenados[meio]
-        meio_cima = round(len(numeros_ordenados) + 0.5)
-        meio_baixo = round(len(numeros_ordenados) - 0.5)
+        meio_cima = int(round(len(numeros_ordenados) + 0.5))
+        meio_baixo = int(round(len(numeros_ordenados) - 0.5))
         return (numeros_ordenados[meio_cima] + numeros_ordenados[meio_baixo]) / 2
+
+    def calculaModa(self):
+        ocorrencias = {}
+        moda = []
+        for item in self.listaValores:
+            if item not in ocorrencias:
+                ocorrencias[item] = self.listaValores.count(item)
+        for k, v in ocorrencias.items():
+            if not moda:
+                moda.append(k)
+            else:
+                if v > ocorrencias[moda[-1]]:
+                    moda = [k]
+                elif v == ocorrencias[moda[-1]]:
+                    moda.append(k)
+        return moda
+
+    def calculaVariancia(self):
+        media = self.calculaMedia()
+        var = 0
+        variance = 0
+        for item in self.listaValores:
+            var += ((item - media) ** 2) 
+        variance = var / (len(self.listaValores) - 1)
+        return variance
+
+    def calculaDesvioPadrao(self):
+        return sqrt(self.calculaVariancia())
 
 
 if __name__ == "__main__":
     valores_aleatorios = [randint(1, 10) for x in range(1, 10)]
     calculo = CalculadoraEstatistica(listaValores=valores_aleatorios)
-    print(calculo.calculaMedia())
-    print(calculo.calculaMediana())
-    print(4.5 // 2)
+    print("nossa media", calculo.calculaMedia())
+    print("statics", statistics.mean(valores_aleatorios))
+    print("nossa mediana", calculo.calculaMediana())
+    print("statistics mediana",  statistics.median(valores_aleatorios))
+    print("nossa moda", calculo.calculaModa())
+    print("statitics moda", statistics.mode(valores_aleatorios))
+    print("nossa variancia", calculo.calculaVariancia())
+    print("statistics variancia", statistics.variance(valores_aleatorios))
+    print("nosso desvio padrao", calculo.calculaDesvioPadrao())
+    print("statistics desvio padrao", statistics.stdev(valores_aleatorios))
