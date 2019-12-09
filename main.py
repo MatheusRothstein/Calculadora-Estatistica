@@ -38,7 +38,7 @@ class Calculadora:
                     moda = [k]
                 elif v == ocorrencias[moda[-1]]:
                     moda.append(k)
-        return moda
+        return sorted(moda)
 
     def calculaVariancia(self):
         media = self.calculaMedia()

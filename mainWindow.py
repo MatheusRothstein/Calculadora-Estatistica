@@ -1,10 +1,11 @@
-
 import sys
-from math import sqrt
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from main import Calculadora as c
+
+from random import randint
+
+from main import Calculadora
 
 
 class Calc(QMainWindow):
@@ -12,6 +13,7 @@ class Calc(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.initUI()
+        self.calculadora = Calculadora(listaValores=self.getTextAndReturnList())
 
     def initUI(self):
         self.line = QLineEdit(self)
@@ -33,90 +35,105 @@ class Calc(QMainWindow):
         self.myLabel.move(5, 325)
         self.myLabel.setFont(font)
 
-        zero = QPushButton("moda", self)
-        zero.move(5, 285)
-        zero.clicked.connect(self.calcularAModa)
-        
-        one = QPushButton("media", self)
-        one.move(5, 235)
-        one.clicked.connect(self.calcularAMedia)
+        self.qtd = QLineEdit(self)
+        self.qtd.move(20, 115)
+        self.qtd.resize(60, 30)
+        self.qtd.setPlaceholderText("Qtd")
+        self.qtd.setStyleSheet("background-color: rgb(255, 0, 0, 0.5);")
 
-        two = QPushButton("mediana", self)
-        two.move(155, 235)
-        two.clicked.connect(self.calcularAMediana)
+        self.menor = QLineEdit(self)
+        self.menor.move(110, 115)
+        self.menor.resize(60, 30)
+        self.menor.setPlaceholderText("Menor")
+        self.menor.setStyleSheet("background-color: rgb(255, 0, 0, 0.5);")
 
-        three = QPushButton("variância", self)
-        three.move(300, 235)
-        three.clicked.connect(self.calcularAVariancia)
+        self.maior = QLineEdit(self)
+        self.maior.move(200, 115)
+        self.maior.resize(60, 30)
+        self.maior.setPlaceholderText("Maior")
+        self.maior.setStyleSheet("background-color: rgb(255, 0, 0, 0.5);")
 
-        four = QPushButton("desvio padrão", self)
-        four.move(5, 185)
-        four.clicked.connect(self.calcularDesvioPadrao)
+        gerar = QPushButton("Gerar Valores", self)
+        gerar.move(290, 115)
+        gerar.clicked.connect(self.gerar_valores)
+        gerar.setStyleSheet("background-color: red")
 
-        five = QPushButton("Divisão de classes", self)
-        five.move(155, 185)
-        five.clicked.connect(self.calculaDivisaoDeClasses)
+        media = QPushButton("Média", self)
+        media.move(5, 200)
+        media.clicked.connect(self.calcularAMedia)
+        media.setStyleSheet("background-color: blue")
 
-        six = QPushButton("6", self)
-        six.move(300, 185)
+        mediana = QPushButton("Mediana", self)
+        mediana.move(150, 200)
+        mediana.clicked.connect(self.calcularAMediana)
+        mediana.setStyleSheet("background-color: blue")
 
-        seven = QPushButton("7", self)
-        seven.move(5, 135)
+        moda = QPushButton("Moda", self)
+        moda.move(295, 200)
+        moda.clicked.connect(self.calcularAModa)
+        moda.setStyleSheet("background-color: blue")
 
-        eight = QPushButton("8", self)
-        eight.move(155, 135)
+        dpadrao = QPushButton("Desvio Padrão", self)
+        dpadrao.move(5, 250)
+        dpadrao.clicked.connect(self.calcularDesvioPadrao)
+        dpadrao.setStyleSheet("background-color: blue")
 
-        nine = QPushButton("9", self)
-        nine.move(300, 135)
+        variancia = QPushButton("Variância", self)
+        variancia.move(150, 250)
+        variancia.clicked.connect(self.calcularAVariancia)
+        variancia.setStyleSheet("background-color: blue")
 
+        distribuicao = QPushButton("Distribuição", self)
+        distribuicao.move(295, 250)
+        distribuicao.clicked.connect(self.calculaDivisaoDeClasses)
+        distribuicao.setStyleSheet("background-color: blue")
 
         self.setGeometry(500, 500, 400, 400)
-        self.setWindowTitle("Calculator")
+        self.setWindowTitle("Calculadora Estatística")
         self.setFixedSize(400, 520)
         self.show()
+
+    def gerar_valores(self):
+        texto = ''
+        for k in range(0, int(self.qtd.text())):
+            texto += ('%s ' % randint(int(self.menor.text()), int(self.maior.text())))
+        self.line.setText(texto)
 
     def getTextAndReturnList(self):
         texto = self.line.text()
         lista = texto.split()
         listaNova = list(map(float, lista))
         return listaNova
-        
+
     def calcularAModa(self):
-        lista = self.getTextAndReturnList()
-        self.function = c(lista)
-        result = self.function.calculaModa()
+        self.calculadora.listaValores = self.getTextAndReturnList()
+        result = self.calculadora.calculaModa() or 'Sem valores'
         self.answer.setText(str(result))
 
     def calcularAMedia(self):
-        lista = self.getTextAndReturnList()
-        self.function = c(lista)
-        resultado = self.function.calculaMedia()
+        self.calculadora.listaValores = self.getTextAndReturnList()
+        resultado = self.calculadora.calculaMedia() or 'Sem valores'
         self.answer.setText(str(resultado))
 
     def calcularAMediana(self):
-        lista = self.getTextAndReturnList()
-        self.function = c(lista)
-        resultado = self.function.calculaMediana()
+        self.calculadora.listaValores = self.getTextAndReturnList()
+        resultado = self.calculadora.calculaMediana() or 'Sem valores'
         self.answer.setText(str(resultado))
 
     def calcularAVariancia(self):
-        lista = self.getTextAndReturnList()
-        self.function = c(lista)
-        resultado = self.function.calculaVariancia()
+        self.calculadora.listaValores = self.getTextAndReturnList()
+        resultado = self.calculadora.calculaVariancia() or 'Sem valores'
         self.answer.setText(str(resultado))
 
     def calcularDesvioPadrao(self):
-        lista = self.getTextAndReturnList()
-        self.function = c(lista)
-        resultado = self.function.calculaDesvioPadrao()
+        self.calculadora.listaValores = self.getTextAndReturnList()
+        resultado = self.calculadora.calculaDesvioPadrao() or 'Sem valores'
         self.answer.setText(str(int(resultado)))
 
     def calculaDivisaoDeClasses(self):
-        lista = self.getTextAndReturnList()
-        self.function = c(lista)
-        resultado = self.function.formata_divisao_classes()
+        self.calculadora.listaValores = self.getTextAndReturnList()
+        resultado = self.calculadora.formata_divisao_classes() or 'Sem valores'
         self.answer.setText(resultado)
-
 
 
 def main():
@@ -124,6 +141,7 @@ def main():
     main = Calc()
     main.show()
     sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     main()
