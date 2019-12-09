@@ -3,7 +3,7 @@ from math import sqrt
 import statistics
 
 
-class CalculadoraEstatistica:
+class Calculadora:
     def __init__(self, listaValores):
         self.listaValores = listaValores
 
@@ -61,7 +61,7 @@ class CalculadoraEstatistica:
 
 if __name__ == "__main__":
     valores_aleatorios = [float(randint(1, 10)) for x in range(1, 11)]
-    calculo = CalculadoraEstatistica(listaValores=valores_aleatorios)
+    calculo = Calculadora(listaValores=valores_aleatorios)
     print("nossa media", calculo.calculaMedia())
     print("statics", statistics.mean(valores_aleatorios))
     print("nossa mediana", calculo.calculaMediana())
