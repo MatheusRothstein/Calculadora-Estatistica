@@ -54,12 +54,31 @@ class Calculadora:
 
     def divisao_classes(self):
         qtd_classes = int(round(sqrt(len(self.listaValores)) + 0.5))
-        amplitude = (max(self.listaValores) - max(self.listaValores)) // qtd_classes
-        return (qtd_classes, amplitude)
+        amplitude = round((max(self.listaValores) - min(self.listaValores)) // qtd_classes + 0.5)
+        classes = {}
+        count = int(min(self.listaValores))
+        for k in range(0, qtd_classes + 1):
+            if count > max(self.listaValores):
+                break
+            classes[(count, count + amplitude)] = 0
+            count += amplitude
+        for item in self.listaValores:
+            for k, v in classes.items():
+                minimo, maximo = k
+                if item >= minimo and item < maximo:
+                    classes[(minimo, maximo)] += 1
+        return classes
+
+    def formata_divisao_classes(self):
+        texto = ''
+        for k, v in self.divisao_classes().items():
+            menor, maior = k
+            texto += f'{menor} |- {maior} = {v}\n'
+        return texto
 
 
 if __name__ == "__main__":
-    valores_aleatorios = [float(randint(1, 10)) for x in range(1, 11)]
+    valores_aleatorios = [float(randint(1, 100)) for x in range(1, 11)]
     calculo = Calculadora(listaValores=valores_aleatorios)
     print("nossa media", calculo.calculaMedia())
     print("statics", statistics.mean(valores_aleatorios))
@@ -71,4 +90,6 @@ if __name__ == "__main__":
     print("statistics variancia", statistics.variance(valores_aleatorios))
     print("nosso desvio padrao", calculo.calculaDesvioPadrao())
     print("statistics desvio padrao", statistics.stdev(valores_aleatorios))
+    print(valores_aleatorios)
     print("DIVISÃO POR CLASSE", calculo.divisao_classes())
+    print("_____________\n%s" % calculo.formata_divisao_classes())
