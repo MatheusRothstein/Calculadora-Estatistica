@@ -1,0 +1,10 @@
+2 grupos de dados => tirar medidas => classes, coefiente de variacao, histograma
+Remover amostras dos grupos e tirar média e variancia
+
+Analisar com amostra grande e pequena
+
+Graficos
+
+Dispersão
+Corelação
+Regressão
