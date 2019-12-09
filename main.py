@@ -20,7 +20,6 @@ class Calculadora:
         if self.is_impar(len(numeros_ordenados)):
             meio = int(len(numeros_ordenados) / 2)
             return numeros_ordenados[meio]
-        import pdb; pdb.set_trace()
         meio_cima = int(round(len(numeros_ordenados) / 2 + 0.5))
         meio_baixo = int(round(len(numeros_ordenados) / 2))
         return (numeros_ordenados[meio_cima] + numeros_ordenados[meio_baixo]) / 2
