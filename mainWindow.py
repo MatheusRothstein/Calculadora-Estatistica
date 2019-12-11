@@ -1,4 +1,5 @@
 import sys
+import time
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -14,16 +15,27 @@ class Calc(QMainWindow):
         QMainWindow.__init__(self)
         self.initUI()
         self.calculadora = Calculadora(listaValores=self.getTextAndReturnList())
+        self.calc2 = Calculadora(listaValores=self.getTextAndReturnList2())
 
     def initUI(self):
+
         self.line = QLineEdit(self)
         self.line.move(5, 5)
         self.line.setAlignment(Qt.AlignLeft)
-        self.line.resize(390, 100)
+        self.line.resize(390, 50)
         font = self.line.font()
         font.setPointSize(12)
         self.line.setFont(font)
         self.line.text()
+
+        self.line2 = QLineEdit(self)
+        self.line2.move(5, 60)
+        self.line2.setAlignment(Qt.AlignLeft)
+        self.line2.resize(390, 50)
+        font = self.line2.font()
+        font.setPointSize(12)
+        self.line2.setFont(font)
+        self.line2.text()
 
         self.answer = QTextEdit(self)
         self.answer.setReadOnly(True)
@@ -53,10 +65,10 @@ class Calc(QMainWindow):
         self.maior.setPlaceholderText("Maior")
         self.maior.setStyleSheet("background-color: rgb(255, 0, 0, 0.5);")
 
-        gerar = QPushButton("Gerar Valores", self)
-        gerar.move(290, 115)
-        gerar.clicked.connect(self.gerar_valores)
-        gerar.setStyleSheet("background-color: red")
+        self.gerar = QPushButton("Gerar Valores", self)
+        self.gerar.move(290, 115)
+        self.gerar.clicked.connect(self.gerar_valores)
+        self.gerar.setStyleSheet("background-color: red")
 
         media = QPushButton("Média", self)
         media.move(5, 200)
@@ -85,12 +97,13 @@ class Calc(QMainWindow):
 
         distribuicao = QPushButton("Distribuição", self)
         distribuicao.move(295, 250)
-        distribuicao.clicked.connect(self.calculaDivisaoDeClasses)
+        distribuicao.clicked.connect(self.distri)
         distribuicao.setStyleSheet("background-color: blue")
 
         self.setGeometry(500, 500, 400, 400)
         self.setWindowTitle("Calculadora Estatística")
-        self.setFixedSize(400, 520)
+
+        self.setFixedSize(1000, 520)
         self.show()
 
     def gerar_valores(self):
@@ -104,36 +117,87 @@ class Calc(QMainWindow):
         lista = texto.split()
         listaNova = list(map(float, lista))
         return listaNova
+    
+    def getTextAndReturnList2(self):
+        texto2 = self.line2.text()
+        lista2 = texto2.split()
+        listaNova2 = list(map(float, lista2))
+        return listaNova2
 
     def calcularAModa(self):
         self.calculadora.listaValores = self.getTextAndReturnList()
         result = self.calculadora.calculaModa() or 'Sem valores'
-        self.answer.setText(str(result))
+
+        self.calc2.listaValores = self.getTextAndReturnList2()
+        result2 = self.calc2.calculaModa() or "Sem valores"
+
+        resposta = "Moda grupo 1: %s\nModa grupo 2: %s" % (str(result), str(result2))
+
+        self.answer.setText(str(resposta))
+
+    def createGraph(self):
+        self.labelTeste = QLabel(self)
+        self.labelTeste.move(400, 5)
+        self.labelTeste.setVisible(True)
+        pixmap = QPixmap("gretchen.jpeg")
+        self.labelTeste.setPixmap(pixmap)
+        self.labelTeste.resize(pixmap.width(), pixmap.height())
 
     def calcularAMedia(self):
         self.calculadora.listaValores = self.getTextAndReturnList()
         resultado = self.calculadora.calculaMedia() or 'Sem valores'
-        self.answer.setText(str(resultado))
+
+        self.calc2.listaValores = self.getTextAndReturnList2()
+        result2 = self.calc2.calculaMedia()
+
+        resposta = "Média grupo 1: %s\nMédia grupo 2: %s" % (str(resultado), str(result2))
+        self.answer.setText(str(resposta))
 
     def calcularAMediana(self):
         self.calculadora.listaValores = self.getTextAndReturnList()
         resultado = self.calculadora.calculaMediana() or 'Sem valores'
-        self.answer.setText(str(resultado))
+
+        self.calc2.listaValores = self.getTextAndReturnList2()
+        result2 = self.calc2.calculaMediana()
+
+        resposta = "Mediana grupo 1: %s\nMediana grupo 2: %s" % (str(resultado), str(result2))
+        self.answer.setText(str(resposta))
 
     def calcularAVariancia(self):
         self.calculadora.listaValores = self.getTextAndReturnList()
         resultado = self.calculadora.calculaVariancia() or 'Sem valores'
-        self.answer.setText(str(resultado))
+
+        self.calc2.listaValores = self.getTextAndReturnList2()
+        result2 = self.calc2.calculaVariancia()
+
+        resposta = "Variância grupo 1: %s\nVariância grupo 2: %s" % (str(resultado), str(result2))
+        self.answer.setText(str(resposta))
 
     def calcularDesvioPadrao(self):
         self.calculadora.listaValores = self.getTextAndReturnList()
         resultado = self.calculadora.calculaDesvioPadrao() or 'Sem valores'
-        self.answer.setText(str(int(resultado)))
+
+        self.calc2.listaValores = self.getTextAndReturnList2()
+        resultado2 = self.calc2.calculaDesvioPadrao()
+ 
+        resposta = "Desv. Padrão grupo 1: %s\nDesv. Padrão grupo 2: %s" % (str(resultado), str(resultado2))
+
+        self.answer.setText(str(resposta))
 
     def calculaDivisaoDeClasses(self):
         self.calculadora.listaValores = self.getTextAndReturnList()
         resultado = self.calculadora.formata_divisao_classes() or 'Sem valores'
-        self.answer.setText(resultado)
+
+        self.calc2.listaValores = self.getTextAndReturnList2()
+        result2 = self.calc2.divisao_classes()
+        
+        resposta = "Classes grupo 1: %s\nClasses grupo 2: %s" % (str(resultado), str(result2))
+        
+        self.answer.setText(str(resposta))
+
+    def distri(self):
+        self.calculaDivisaoDeClasses()
+        self.createGraph()
 
 
 def main():
