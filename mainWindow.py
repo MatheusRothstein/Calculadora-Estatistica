@@ -117,6 +117,10 @@ class Calc(QMainWindow):
         for k in range(0, int(self.qtd.text())):
             texto += ('%s ' % randint(int(self.menor.text()), int(self.maior.text())))
         self.line.setText(texto)
+        texto2 = ''
+        for i in range(0, int(self.qtd.text())):
+            texto2 += ('%s ' % randint(int(self.menor.text()), int(self.maior.text())))
+        self.line2.setText(texto2)
 
     def getTextAndReturnList(self):
         texto = self.line.text()
