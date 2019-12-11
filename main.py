@@ -38,7 +38,16 @@ class Calculadora:
                     moda = [k]
                 elif v == ocorrencias[moda[-1]]:
                     moda.append(k)
-        return sorted(moda)
+        if len(moda) > 1:
+            m = abs(self.calculaMedia() - moda[0])
+            moda_atualizada = [moda[0]]
+            for valor in moda[1:]:
+                if abs(self.calculaMedia() - valor) < m:
+                    m = abs(self.calculaMedia() - valor)
+                    moda_atualizada = valor
+            moda = [moda_atualizada]
+
+        return moda[0]
 
     def calculaVariancia(self):
         media = self.calculaMedia()
@@ -75,6 +84,15 @@ class Calculadora:
             menor, maior = k
             texto += f'{menor} |- {maior} = {v}\n'
         return texto
+
+    def cria_labels_values(self):
+        labels = []
+        values = []
+        for k, v in self.divisao_classes().items():
+            menor, maior = k
+            labels.append(f'{menor} |- {maior}')
+            values.append(v)
+        return (labels, values)
 
 
 if __name__ == "__main__":
