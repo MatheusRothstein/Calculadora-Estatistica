@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import *
 from random import randint
 
 from main import Calculadora
-from graficos import grafico_barra_distribuicao_classes as graph
+from graficos import grafico_barra_distribuicao_classes, grafico_regressao
 
 
 class Calc(QMainWindow):
@@ -103,6 +103,7 @@ class Calc(QMainWindow):
 
         regressao = QPushButton("Regressão", self)
         regressao.move(5, 300)
+        regressao.clicked.connect(self.regressao)
         regressao.setStyleSheet("background-color: blue")
 
         self.setGeometry(500, 500, 400, 400)
@@ -122,7 +123,7 @@ class Calc(QMainWindow):
         lista = texto.split()
         listaNova = list(map(float, lista))
         return listaNova
-    
+
     def getTextAndReturnList2(self):
         texto2 = self.line2.text()
         lista2 = texto2.split()
@@ -184,7 +185,7 @@ class Calc(QMainWindow):
 
         self.calc2.listaValores = self.getTextAndReturnList2()
         resultado2 = self.calc2.calculaDesvioPadrao()
- 
+
         resposta = "Desv. Padrão grupo 1: %s\nDesv. Padrão grupo 2: %s" % (str(resultado), str(resultado2))
 
         self.answer.setText(str(resposta))
@@ -194,22 +195,29 @@ class Calc(QMainWindow):
         resultado = self.calculadora.formata_divisao_classes() or 'Sem valores'
 
         self.calc2.listaValores = self.getTextAndReturnList2()
-        result2 = self.calc2.divisao_classes()
-        
-        resposta = "Classes grupo 1: %s\nClasses grupo 2: %s" % (str(resultado), str(result2))
-        
+        result2 = self.calc2.formata_divisao_classes()
+
+        resposta = "Classes grupo 1:\n%s\nClasses grupo 2: \n%s" % (str(resultado), str(result2))
+
         self.answer.setText(str(resposta))
 
     def distri(self):
-        self.calculadora.listaValores = self.getTextAndReturnList()   
+        self.calculadora.listaValores = self.getTextAndReturnList()
         self.calculaDivisaoDeClasses()
 
         info = self.calculadora.cria_labels_values()
         label = info[0]
         value = info[1]
-        self.grafico = graph(label, value)
+        self.grafico = grafico_barra_distribuicao_classes(label, value)
         self.showGraph('distribuicao_classe.png')
-        
+
+    def regressao(self):
+        xarr = self.getTextAndReturnList()
+        yarr = self.getTextAndReturnList2()
+
+        self.grafico = grafico_regressao(xarr, yarr)
+        self.showGraph('regressao.png')
+
 
 def main():
     app = QApplication(sys.argv)
