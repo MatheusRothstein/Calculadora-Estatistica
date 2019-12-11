@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import *
 from random import randint
 
 from main import Calculadora
+from graficos import grafico_barra_distribuicao_classes as graph
 
 
 class Calc(QMainWindow):
@@ -135,11 +136,11 @@ class Calc(QMainWindow):
 
         self.answer.setText(str(resposta))
 
-    def createGraph(self):
+    def showGraph(self, imagem):
         self.labelTeste = QLabel(self)
         self.labelTeste.move(400, 5)
         self.labelTeste.setVisible(True)
-        pixmap = QPixmap("gretchen.jpeg")
+        pixmap = QPixmap(imagem)
         self.labelTeste.setPixmap(pixmap)
         self.labelTeste.resize(pixmap.width(), pixmap.height())
 
@@ -196,9 +197,15 @@ class Calc(QMainWindow):
         self.answer.setText(str(resposta))
 
     def distri(self):
+        self.calculadora.listaValores = self.getTextAndReturnList()   
         self.calculaDivisaoDeClasses()
-        self.createGraph()
 
+        info = self.calculadora.cria_labels_values()
+        label = info[0]
+        value = info[1]
+        self.grafico = graph(label, value)
+        self.showGraph('distribuicao_classe.png')
+        
 
 def main():
     app = QApplication(sys.argv)

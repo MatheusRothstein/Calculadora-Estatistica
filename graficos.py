@@ -13,4 +13,5 @@ def grafico_barra_distribuicao_classes(labels, values):
     plt.ylabel('Valor absoluto')
     plt.title('Distribuição por classes')
 
-    fig.savefig('distribuicao_classe')
+    fig.savefig('distribuicao_classe.png')
+    return fig
