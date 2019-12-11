@@ -106,6 +106,17 @@ class Calc(QMainWindow):
         regressao.clicked.connect(self.regressao)
         regressao.setStyleSheet("background-color: blue")
 
+        self.num_amosta = QLineEdit(self)
+        self.num_amosta.move(200, 300)
+        self.num_amosta.resize(60, 30)
+        self.num_amosta.setPlaceholderText("Qtd")
+        self.num_amosta.setStyleSheet("background-color: rgb(255, 255, 0, 0.5);")
+
+        amostra = QPushButton("Pegar Amostra", self)
+        amostra.move(295, 300)
+        amostra.clicked.connect(self.getResultAmostra)
+        amostra.setStyleSheet("background-color: yellow")
+
         self.setGeometry(500, 500, 400, 400)
         self.setWindowTitle("Calculadora Estatística")
 
@@ -121,6 +132,28 @@ class Calc(QMainWindow):
         for i in range(0, int(self.qtd.text())):
             texto2 += ('%s ' % randint(int(self.menor.text()), int(self.maior.text())))
         self.line2.setText(texto2)
+
+    def getAmostra(self):
+        indices = []
+        amostra = []
+        while len(indices) != int(self.num_amosta.text()):
+            r = randint(0, len(self.getTextAndReturnList()))
+            if r not in indices:
+                indices.append(r)
+        for k in indices:
+            amostra.append(self.getTextAndReturnList()[k-1])
+        return amostra
+
+    def getResultAmostra(self):
+        self.calculadora.listaValores = self.getTextAndReturnList()
+        media_p = self.calculadora.calculaMedia()
+        variancia_p = self.calculadora.calculaVariancia()
+
+        self.calculadora.listaValores = self.getAmostra()
+        media_a = self.calculadora.calculaMedia()
+        variancia_a = self.calculadora.calculaVariancia_amostral()
+        resposta = "Média da população: %s\nVariância da população: %s\n\nMédia da amostra: %s\nVariância da amostra: %s" % (media_p, variancia_p, media_a, variancia_a)
+        self.answer.setText(str(resposta))
 
     def getTextAndReturnList(self):
         texto = self.line.text()

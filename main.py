@@ -55,8 +55,17 @@ class Calculadora:
         variance = 0
         for item in self.listaValores:
             var += ((item - media) ** 2)
-        variance = var / (len(self.listaValores) - 1)
+        variance = var / (len(self.listaValores))
         return variance
+
+    def calculaVariancia_amostral(self):
+        media = self.calculaMedia()
+        var = 0
+        variance_pop = 0
+        for item in self.listaValores:
+            var += ((item - media) ** 2)
+        variance_pop = var / (len(self.listaValores) - 1)
+        return variance_pop
 
     def calculaDesvioPadrao(self):
         return sqrt(self.calculaVariancia())
