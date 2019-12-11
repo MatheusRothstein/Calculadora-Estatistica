@@ -101,6 +101,10 @@ class Calc(QMainWindow):
         distribuicao.clicked.connect(self.distri)
         distribuicao.setStyleSheet("background-color: blue")
 
+        regressao = QPushButton("Regressão", self)
+        regressao.move(5, 300)
+        regressao.setStyleSheet("background-color: blue")
+
         self.setGeometry(500, 500, 400, 400)
         self.setWindowTitle("Calculadora Estatística")
 
